@@ -3,7 +3,6 @@
     "description": "Bitrix24 Library",
     "type": "library",
     "license": "proprietary",
-    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Debishev\\Bitrix24Library\\": "src/"
@@ -18,6 +17,8 @@
     "require": {
         "php": ">=8.3",
         "symfony/dependency-injection": "^7.1",
-        "symfony/http-client": "^7.1"
+        "symfony/http-client": "^7.1",
+        "symfony/http-kernel": "^7.1",
+        "symfony/config": "^7.1"
     }
 }

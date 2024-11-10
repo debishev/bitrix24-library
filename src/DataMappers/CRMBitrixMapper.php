@@ -14,8 +14,7 @@ use Debishev\Bitrix24Library\Entity\CrmProfile;
 use Debishev\Bitrix24Library\Entity\CrmSmartProcess;
 use Debishev\Bitrix24Library\Entity\CrmTask;
 use Debishev\Bitrix24Library\Entity\CrmUser;
-use Money\Currency;
-use Money\Money;
+
 
 class CRMBitrixMapper extends CRMBaseMapper
 {

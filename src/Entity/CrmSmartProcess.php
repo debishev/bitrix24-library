@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Debishev\Bitrix24Library\Entity;
 
-use Money\Money;
+
 
 class CrmSmartProcess
 {
