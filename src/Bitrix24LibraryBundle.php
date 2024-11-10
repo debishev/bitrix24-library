@@ -31,7 +31,7 @@ class Bitrix24LibraryBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $container->services()->get($this->getContainerExtension())
+        $container->services()->get($this->getContainerExtension()->getAlias())
             ->get('bitrix24')->get('webhook')
             ->arg(0, $config['bitrix24']['webhook_url'])
             ->arg(1, $config['bitrix24']['base_url'])
