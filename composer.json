@@ -3,6 +3,7 @@
     "description": "Bitrix24 Library",
     "type": "library",
     "license": "proprietary",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "Debishev\\Bitrix24Library\\": "src/"
