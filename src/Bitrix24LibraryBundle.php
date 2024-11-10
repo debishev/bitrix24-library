@@ -3,6 +3,8 @@
 namespace Debishev\Bitrix24Library;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class Bitrix24LibraryBundle extends AbstractBundle
@@ -20,5 +22,15 @@ class Bitrix24LibraryBundle extends AbstractBundle
             ->end()
         ;
     }
+
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->services()
+            ->get('bitrix24.webhook')
+            ->arg(0, $config['bitrix24']['webhook_url'])
+            ->arg(1, $config['bitrix24']['base_url'])
+        ;
+    }
+
 
 }
