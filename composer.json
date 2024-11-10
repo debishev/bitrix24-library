@@ -3,6 +3,7 @@
     "description": "Bitrix24 Library",
     "type": "library",
     "license": "proprietary",
+    "version": "0.0.1",
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
