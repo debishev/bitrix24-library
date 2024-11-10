@@ -20,6 +20,6 @@ class Bitrix24LibraryExtension extends Extension
             new FileLocator(__DIR__ . '/../config')
         );
 
-        $loader->load('services.yaml');
+        $loader->load('bitrix24_library.yaml');
     }
 }

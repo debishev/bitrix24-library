@@ -22,5 +22,9 @@
         "symfony/http-client": "^7.1",
         "symfony/http-kernel": "^7.1",
         "symfony/config": "^7.1"
+    },
+    "copy-from-recipe": {
+        "config/": "%CONFIG_DIR%/",
+        "src/": "%SRC_DIR%/"
     }
 }
