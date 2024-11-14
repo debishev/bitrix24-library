@@ -88,7 +88,7 @@ class CRMBitrixMapper extends CRMBaseMapper
         $deal->setClosedAt($closetAt);
         $deal->setPipelineId($rawData['CATEGORY_ID']);
         $deal->setIsClosed($isClosed == 'Y');
-        $deal->setVendor(intval($rawData['UF_CRM_1707157308']) ?? 0);
+        $deal->setVendor(0);
 
 
         foreach ($rawData as $key => $val) {
