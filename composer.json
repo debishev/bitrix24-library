@@ -23,8 +23,8 @@
         "symfony/http-kernel": "^7.1",
         "symfony/config": "^7.1"
     },
-    "copy-from-recipe": {
-        "config/": "%CONFIG_DIR%/",
+    "copy-from-package": {
+        "config/bitrix24_library.yaml": "%CONFIG_DIR%/packages/bitrix24_library.yaml",
         "src/": "%SRC_DIR%/"
     }
 }

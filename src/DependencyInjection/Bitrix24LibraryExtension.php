@@ -15,11 +15,11 @@ class Bitrix24LibraryExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__ . '/../config')
-        );
-
-        $loader->load('bitrix24_library.yaml');
+//        $loader = new YamlFileLoader(
+//            $container,
+//            new FileLocator(__DIR__ . '/../config')
+//        );
+//
+//        $loader->load('bitrix24_library.yaml');
     }
 }

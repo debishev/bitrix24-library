@@ -11,6 +11,12 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class Bitrix24LibraryBundle extends AbstractBundle
 {
+
+    public function __construct(string $webhookUrl, string $baseUrl)
+    {
+
+    }
+
     public function configure(DefinitionConfigurator $definition): void
     {
         $definition->rootNode()

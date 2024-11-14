@@ -14,16 +14,17 @@ class CRMDriverClass
 
 
     public function __construct(
-        private readonly Bitrix24ApiConnectorDriver $bitrix24ApiConnector,
-        ContainerBagInterface $containerBag
+        protected readonly Bitrix24ApiConnectorDriver $bitrix24ApiConnector,
+        private readonly ContainerBagInterface $containerBag
     )
+    { }
+
+
+    public function setup(string $webhookUrl, string $baseUrl): void
     {
-        $url = $containerBag->get('bx.webhook.url');
-        $this->bitrix24ApiConnector->webhookUrl = 'https://domain.loc/rest/1/1234';
-        $this->bitrix24ApiConnector->baseUrl = 'https://domain.locg/rest';
+        $this->bitrix24ApiConnector->webhookUrl = $webhookUrl;
+        $this->bitrix24ApiConnector->baseUrl = $baseUrl;
     }
-
-
 
 
 }
