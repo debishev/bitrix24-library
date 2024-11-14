@@ -2,6 +2,7 @@
 
 namespace Debishev\Bitrix24Library;
 
+use Debishev\Bitrix24Library\Core\Driver\CRMDriverClass;
 use Debishev\Bitrix24Library\DependencyInjection\Bitrix24LibraryExtension;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,9 +13,14 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 class Bitrix24LibraryBundle extends AbstractBundle
 {
 
-    public function __construct(string $webhookUrl, string $baseUrl)
+    public function __construct(public readonly CRMDriverClass $bitrixDriver)
     {
 
+    }
+
+    public function setupDriver(string $webhookUrl, string $baseUrl): void
+    {
+        $this->bitrixDriver->setup($webhookUrl, $baseUrl);
     }
 
     public function configure(DefinitionConfigurator $definition): void
