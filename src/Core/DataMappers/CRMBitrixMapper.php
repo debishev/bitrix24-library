@@ -60,7 +60,7 @@ class CRMBitrixMapper extends CRMBaseMapper
 
 
 
-        $date = DateTimeImmutable::createFromFormat(DATE_ATOM, $rawData['UF_CRM_1691908403517']);
+        $date = DateTimeImmutable::createFromFormat(DATE_ATOM, $rawData['DATE_CREATE']);
 
         if (gettype($date) == "boolean") {
             $date = new DateTimeImmutable();
