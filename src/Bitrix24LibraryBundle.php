@@ -2,25 +2,32 @@
 
 namespace Debishev\Bitrix24Library;
 
+use Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24ApiConnectorDriver;
+use Debishev\Bitrix24Library\Core\DataMappers\CRMBitrixMapper;
 use Debishev\Bitrix24Library\Core\Driver\CRMDriverClass;
 use Debishev\Bitrix24Library\DependencyInjection\Bitrix24LibraryExtension;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class Bitrix24LibraryBundle extends AbstractBundle
 {
 
-    public function __construct(public readonly CRMDriverClass $bitrixDriver)
+    public readonly Bitrix24ApiConnectorDriver $bitrixDriver;
+
+    public function __construct()
     {
 
+        $this->bitrixDriver = new Bitrix24ApiConnectorDriver(HttpClient::create(), new CRMBitrixMapper());
     }
 
     public function setupDriver(string $webhookUrl, string $baseUrl): void
     {
-        $this->bitrixDriver->setup($webhookUrl, $baseUrl);
+        $this->bitrixDriver->webhookUrl = $webhookUrl;
+        $this->bitrixDriver->baseUrl = $baseUrl;
     }
 
     public function configure(DefinitionConfigurator $definition): void
