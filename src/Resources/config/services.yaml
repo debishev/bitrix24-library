@@ -1,0 +1,37 @@
+services:
+  # Регистрация команды
+  debishev.bitrix24library.generate_config_command:
+    class: Debishev\Bitrix24Library\Command\GenerateConfigCommand
+    arguments:
+      - '@kernel'
+    tags:
+      - { name: 'console.command', command: 'bitrix24:generate-config' }
+
+  # Регистрация сервиса ConnectorDriver
+  debishev.bitrix24library.connector_driver:
+    class: Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24ApiConnectorDriver
+    arguments:
+      $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+      $serializer: '@Symfony\Component\Serializer\SerializerInterface'
+      $webhookUrl: '%bitrix24_library.webhook_url%'
+      $baseUrl: '%bitrix24_library.base_url%'
+    public: false
+
+  # Алиас для сервиса Bitrix24UserProvider
+  Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24ApiConnectorDriver:
+    alias: debishev.bitrix24library.connector_driver
+    public: true
+
+
+
+  # Регистрация сервиса Bitrix24UserProvider
+  debishev.bitrix24library.security_provider:
+    class: Debishev\Bitrix24Library\Core\Security\Bitrix24UserProvider
+    arguments:
+      $bitrix24ApiConnector: '@debishev.bitrix24library.connector_driver'
+    public: false
+
+  # Алиас для сервиса Bitrix24UserProvider
+  Debishev\Bitrix24Library\Core\Security\Bitrix24UserProvider:
+    alias: debishev.bitrix24library.security_provider
+    public: true
