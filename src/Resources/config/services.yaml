@@ -35,3 +35,5 @@ services:
   Debishev\Bitrix24Library\Core\Security\Bitrix24UserProvider:
     alias: debishev.bitrix24library.security_provider
     public: true
+
+

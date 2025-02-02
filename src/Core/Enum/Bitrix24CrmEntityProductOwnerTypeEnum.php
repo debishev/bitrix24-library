@@ -13,7 +13,6 @@ enum Bitrix24CrmEntityProductOwnerTypeEnum: string
     case QUOTE = "Q";
     case REQUISITE = "RQ";
     case ORDER = "O";
-    case DYNAMIC_128 = "T80";
 
     function getSmartProcessHex($decimalId): string {
         // Преобразуем число в шестнадцатеричную систему

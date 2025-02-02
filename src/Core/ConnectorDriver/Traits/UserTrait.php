@@ -50,7 +50,7 @@ trait UserTrait
         $fields['ID'] = $id;
         $res =  $this->request('user.update',$fields);
 
-        return (bool) json_decode($res, true)['result'];
+        return (bool) $res['result'];
     }
 
 

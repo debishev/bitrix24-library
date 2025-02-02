@@ -20,7 +20,7 @@ class CrmDealContact
     public ?string $PHOTO;
     public ?string $LEAD_ID;
     public string $TYPE_ID;
-    public string $SOURCE_ID;
+    public ?string $SOURCE_ID;
     public ?string $SOURCE_DESCRIPTION;
     public ?string $COMPANY_ID;
     public ?string $BIRTHDATE;

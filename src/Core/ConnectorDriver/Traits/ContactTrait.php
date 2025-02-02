@@ -10,7 +10,7 @@ trait ContactTrait
     {
         $res = $this->getOneItem('crm.contact.get',['ID' => $id]);
 
-        return new CrmDealContact($res);
+        return new CrmDealContact($res['result']);
     }
 
 

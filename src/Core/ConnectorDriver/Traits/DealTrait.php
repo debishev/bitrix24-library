@@ -9,8 +9,8 @@ trait DealTrait
 {
     public function getDealById(int $id): ?CrmDeal
     {
-
-        return  new CrmDeal( $this->getOneItem('crm.deal.get',['ID' => $id]));
+        $result = $this->getOneItem('crm.deal.get',['ID' => $id]);
+        return count($result['result']) > 0 ?  new CrmDeal($result['result']) : null;
     }
     public function updateDeal(string $id, array $fields): bool
     {
@@ -39,10 +39,6 @@ trait DealTrait
             'order' => [],
         ]);
 
-        $res = iterator_to_array($res, false)[0];
-
-
-
         foreach ($res as $item) {
             $list [] = new CrmDeal($item);
         }
@@ -65,7 +61,7 @@ trait DealTrait
             'fields' => $fields
         ]);
 
-        return (int) json_decode($result, true);
+        return (int) $result['result'];
     }
 
 }

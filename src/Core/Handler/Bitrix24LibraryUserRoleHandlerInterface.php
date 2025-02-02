@@ -10,8 +10,8 @@ interface Bitrix24LibraryUserRoleHandlerInterface
 {
     public function execCommand(Bitrix24LibraryMobileAppCommandTypeEnum $command, array $params): array;
     public function getMyHistory(array $params): array;
-    public function getUserMenu(array $params): array;
+    public function getUserMenu(): array;
 
-
+    public function startScreenAfterLogin(): string;
 
 }

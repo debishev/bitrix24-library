@@ -48,15 +48,22 @@ class Bitrix24ApiConnectorDriver
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function request(string $command, array $params): mixed
+    public function request(string $command, array $params, string $method = 'POST'): mixed
     {
-        $result = $this->httpClient->request('POST',$this->getUrl($command),[
+        $httpParams = [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Connection' => 'close',
             ],
-            'body' => $params
-        ]);
+        ];
+
+        if ($method === 'POST') {
+            $httpParams['body'] =$params;
+        } else {
+            $httpParams['query'] =$params;
+        }
+
+        $result = $this->httpClient->request($method,$this->getUrl($command),$httpParams);
 
 //        $this->lastResponse = json_decode($result->getContent(), true);
 
@@ -179,11 +186,12 @@ class Bitrix24ApiConnectorDriver
      * @return Generator
      * @see    https://dev.1c-bitrix.ru/rest_help/general/lists.php
      */
-    public function fetchList(string $function, array $params): Generator
+    public function fetchList(string $function, array $params): array
     {
 
 
         $export = [];
+        $exportResult = [];
         $commands = [];
 
         $res = $this->getRowsCount($function, $params);
@@ -193,9 +201,9 @@ class Bitrix24ApiConnectorDriver
         $totalRowsCount = intval($res['total']);
 
 
-        if ($totalRowsCount > 0) {
+        if ($totalRowsCount > 50) {
             $chunkSize = 50; // Размер чанка
-            $totalChunks = ceil($totalRowsCount / $chunkSize); // Общее количество чанков
+            $totalChunks = ceil($totalRowsCount / $chunkSize);
 
 
 
@@ -226,16 +234,26 @@ class Bitrix24ApiConnectorDriver
 
                 $export [] = $response['result']['result'];
             }
-        }
 
 
-
-        foreach ($export as $lvl1) {
-            foreach ($lvl1 as $item) {
-                yield $item;
+            foreach ($export as $lvl1) {
+                foreach ($lvl1 as $item) {
+//                    yield $item;
+                    $exportResult [] = $item;
+                }
             }
+        } else {
+            $res = $res['result']['items'] ?? $res['result'];
+            foreach ($res as $item) {
+                $exportResult [] = $item;
+            }
+
         }
 
+
+
+
+        return $exportResult;
 
 
     }
@@ -255,7 +273,8 @@ class Bitrix24ApiConnectorDriver
     {
         $result = $this->request(
             $command,
-            $params
+            $params,
+            'GET'
         );
 
         yield $result;

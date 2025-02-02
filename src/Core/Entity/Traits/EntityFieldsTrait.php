@@ -23,6 +23,7 @@ trait EntityFieldsTrait
 
                 if (str_starts_with($key, 'UF_CRM_')
                     || str_starts_with($key, 'ufCrm')
+                    || str_starts_with($key, 'UF_USR')
                     || str_starts_with($key, 'PROPERTY_') ){
                     $cFields[$key] = $value;
                 } else {

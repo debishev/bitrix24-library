@@ -15,7 +15,6 @@ trait DealActivityTrait
             'select' => $select
         ];
         $res = $this->fetchList('crm.activity.list',$params);
-        $res = iterator_to_array($res, false)['0'];
 
         foreach ($res as $item) {
             $list[] = new CrmActivity($item);

@@ -12,16 +12,17 @@ trait SmartProcessTrait {
     public function getSmartProcessList(string $typeId, array $filter, array $order): array
     {
         $list = [];
-        $res = $this->fetchList('crm.item.list',[
+        $items = $this->fetchList('crm.item.list',[
             'entityTypeId' => $typeId,
             'filter' => $filter,
             'order' => $order,
         ]);
 
-        $items = iterator_to_array($res, false)[0]['items'];
         foreach ($items as $item) {
             $list[] = new CrmSmartProcess($item);
+
         }
+
         return $list;
     }
 
@@ -42,7 +43,7 @@ trait SmartProcessTrait {
             'entityTypeId' => $entityTypeId,
             'fields' => $fields
         ]);
-        $res = $result['item'];
+        $res = $result['result']['item'];
         return new CrmSmartProcess($res);
     }
 
@@ -50,6 +51,27 @@ trait SmartProcessTrait {
         $this->request('crm.item.delete',[
             'entityTypeId' => $typeId,
             'id' => $id
+        ]);
+    }
+
+    public function attachProductsToSmartProcess(string $entityHexTypeId, int $itemId, array $products ): void {
+
+        $exProducts = [];
+
+        foreach ($products as $product) {
+            $exProducts [] = [
+                'ownerType' => $entityHexTypeId,
+                'ownerId' => $itemId,
+                'productId' => $product['productId'],
+                'price' => $product['price'],
+                'quantity' => $product['quantity'],
+            ];
+        }
+
+        $this->request('crm.item.productrow.set', [
+            'ownerType' => $entityHexTypeId,
+            'ownerId' => $itemId,
+            'productRows' => $exProducts,
         ]);
     }
 

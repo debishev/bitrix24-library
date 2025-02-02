@@ -20,7 +20,7 @@ trait CrmProductTrait
         return new CrmProduct($res);
     }
 
-    public function getProductListByCrmEntityId(int $dealId, string $typeHex): array
+    public function getProductListByCrmEntityId(int|array $dealId, string $typeHex): array
     {
         $list = [];
         $res = $this->getList('crm.item.productrow.list',[
@@ -30,7 +30,8 @@ trait CrmProductTrait
             ]
         ]);
         $res = iterator_to_array($res, false)[0];
-        foreach ($res['productRows'] as $item) {
+
+        foreach ($res['result']['productRows'] as $item) {
             $list [] = new CrmEntityProduct($item);
         }
         return $list;
@@ -42,10 +43,15 @@ trait CrmProductTrait
         $res = $this->fetchList('crm.product.list', [
             'filter' => $filter
         ]);
-        $res = iterator_to_array($res, false)[0];
+
+
+
+
+
         foreach ($res as $item) {
             $list [] = new CrmProduct($item);
         }
+
         return $list;
     }
 

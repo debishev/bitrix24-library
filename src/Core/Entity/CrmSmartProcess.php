@@ -12,7 +12,7 @@ class CrmSmartProcess
     use EntityFieldsTrait;
 
     public int $id;
-    public string $xmlId;
+    public ?string $xmlId;
     public string $title;
     public int $createdBy;
     public int $updatedBy;
@@ -23,7 +23,7 @@ class CrmSmartProcess
     public int $categoryId;
     public string $opened;
     public string $stageId;
-    public string $previousStageId;
+    public ?string $previousStageId;
     public DateTimeImmutable $begindate;
     public DateTimeImmutable $closedate;
     public int $companyId;
@@ -34,7 +34,7 @@ class CrmSmartProcess
     public string $currencyId;
     public int $mycompanyId;
     public string $sourceId;
-    public string $sourceDescription;
+    public ?string $sourceDescription;
     public int $webformId;
     public int $assignedById;
     public int $lastActivityBy;
