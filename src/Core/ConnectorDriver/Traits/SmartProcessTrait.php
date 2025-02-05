@@ -33,7 +33,9 @@ trait SmartProcessTrait {
             'id' => $factId
         ]);
 
-        return new CrmSmartProcess($res);
+
+
+        return new CrmSmartProcess($res['result']['item']);
     }
 
 
@@ -44,6 +46,19 @@ trait SmartProcessTrait {
             'fields' => $fields
         ]);
         $res = $result['result']['item'];
+        return new CrmSmartProcess($res);
+    }
+
+    public function updateSmartProcess(int $id, string $entityTypeId, array $fields): CrmSmartProcess {
+
+        $result = $this->request('crm.item.update',[
+            'entityTypeId' => $entityTypeId,
+            'id' => $id,
+            'fields' => $fields
+        ]);
+        $res = $result['result']['item'];
+
+
         return new CrmSmartProcess($res);
     }
 

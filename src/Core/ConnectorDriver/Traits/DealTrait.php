@@ -19,7 +19,7 @@ trait DealTrait
             'fields' => $fields
         ]);
 
-        return (bool) json_decode($result, true)['result'];
+        return (bool) $result['result'];
 
     }
 

@@ -13,7 +13,9 @@ trait UserTrait
     {
         $res = $this->getOneItem('user.get',[
             'ID' => $id,
-        ])[0];
+        ])['result'][0];
+
+
 
         return  new CrmUser($res);
     }

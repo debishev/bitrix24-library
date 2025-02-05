@@ -7,6 +7,8 @@ services:
     tags:
       - { name: 'console.command', command: 'bitrix24:generate-config' }
 
+
+
   # Регистрация сервиса ConnectorDriver
   debishev.bitrix24library.connector_driver:
     class: Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24ApiConnectorDriver
@@ -20,6 +22,27 @@ services:
   # Алиас для сервиса Bitrix24UserProvider
   Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24ApiConnectorDriver:
     alias: debishev.bitrix24library.connector_driver
+    public: true
+
+
+
+
+
+
+
+
+  # Регистрация сервиса AuthConnectorDriver
+  debishev.bitrix24library.connector_crest:
+    class: Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24AuthConnectorDrive
+    arguments:
+      $clientId: '%bitrix24_library.app_client_id%'
+      $clientSecret: '%bitrix24_library.app_client_secret%'
+      $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+      $kernel: '@kernel'
+    public: false
+
+  Debishev\Bitrix24Library\Core\ConnectorDriver\Bitrix24AuthConnectorDrive:
+    alias: debishev.bitrix24library.connector_crest
     public: true
 
 

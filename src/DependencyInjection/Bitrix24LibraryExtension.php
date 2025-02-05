@@ -20,6 +20,8 @@ class Bitrix24LibraryExtension extends Extension
         // Устанавливаем параметры в контейнер
         $container->setParameter('bitrix24_library.webhook_url', $config['webhook_url']);
         $container->setParameter('bitrix24_library.base_url', $config['base_url']);
+        $container->setParameter('bitrix24_library.app_client_id', $config['app_client_id']);
+        $container->setParameter('bitrix24_library.app_client_secret', $config['app_client_secret']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');

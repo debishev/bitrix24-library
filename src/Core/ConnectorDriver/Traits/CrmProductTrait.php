@@ -17,7 +17,9 @@ trait CrmProductTrait
     public function getProductById(int $id): mixed
     {
         $res = $this->getOneItem('crm.product.get',['ID' => $id]);
-        return new CrmProduct($res);
+
+
+        return new CrmProduct($res['result']);
     }
 
     public function getProductListByCrmEntityId(int|array $dealId, string $typeHex): array

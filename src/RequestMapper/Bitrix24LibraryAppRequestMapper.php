@@ -10,7 +10,7 @@ class Bitrix24LibraryAppRequestMapper
     public array $PLACEMENT_OPTIONS = [];
     public function __construct(
         public string $AUTH_ID,
-        public int $AUTH_EXPIRES,
+        public string $AUTH_EXPIRES,
         public string $REFRESH_ID,
         public string $member_id,
         public string $status,
