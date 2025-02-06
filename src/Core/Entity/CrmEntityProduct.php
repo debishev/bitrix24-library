@@ -18,7 +18,7 @@ class CrmEntityProduct
     public float $priceExclusive;
     public float $priceNetto;
     public float $priceBrutto;
-    public int $quantity;
+    public float $quantity;
     public int $discountTypeId;
     public float $discountRate;
     public float $discountSum;
@@ -33,6 +33,7 @@ class CrmEntityProduct
 
     public function __construct(array $data = [])
     {
+
         $this->fillData($data);
     }
 }

@@ -34,7 +34,14 @@ trait EntityFieldsTrait
                             } else {
                                 $this->$key = null;
                             }
-                        } else {
+                        } elseif ($key == 'quantity' || $key == 'opportunity') {
+                            if ($value != null && $value != '') {
+                                $this->$key = floatval($value);
+                            }  else {
+                                $this->$key = floatval(0);
+                            }
+                        }
+                        else {
                             if (!is_array($value)) {
                                 if (strlen($value) > 0) {
                                     $this->$key = $value;
