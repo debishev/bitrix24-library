@@ -22,7 +22,7 @@ class CrmUser implements UserInterface
     public ?string $LAST_NAME;
     public ?string $SECOND_NAME;
     public ?string $EMAIL;
-    public DateTimeImmutable $LAST_LOGIN;
+    public ?DateTimeImmutable $LAST_LOGIN;
     public DateTimeImmutable $DATE_REGISTER;
     public ?string $TIME_ZONE;
     public ?string $IS_ONLINE;
