@@ -21,7 +21,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Bitrix24ApiConnectorDriver
 {
-
     use UserTrait;
     use SmartProcessTrait;
     use DealTrait;
@@ -31,16 +30,14 @@ class Bitrix24ApiConnectorDriver
     use CompanyTrait;
     use CrmProductTrait;
 
-
-    protected ?array $lastResponse = null ;
+    protected ?array $lastResponse = null;
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         protected readonly SerializerInterface $serializer,
         private readonly string $webhookUrl,
         private readonly string $baseUrl
-
-    ) { }
+    ) {}
 
     /**
      * @throws TransportExceptionInterface
@@ -57,16 +54,14 @@ class Bitrix24ApiConnectorDriver
             ],
         ];
 
+        $url = $this->getUrl($command);
         if ($method === 'POST') {
-            $httpParams['body'] =$params;
-        } else {
-            $httpParams['query'] =$params;
+            $httpParams['body'] = $params;
+        } elseif ($method === 'GET' && !empty($params)) {
+            $url .= '?' . http_build_query($params);
         }
 
-        $result = $this->httpClient->request($method,$this->getUrl($command),$httpParams);
-
-//        $this->lastResponse = json_decode($result->getContent(), true);
-
+        $result = $this->httpClient->request($method, $url, $httpParams);
 
         try {
             $this->lastResponse = json_decode($result->getContent(), true);
@@ -74,25 +69,21 @@ class Bitrix24ApiConnectorDriver
             $this->lastResponse = [];
         }
 
-
-
-
         if ($result->getStatusCode() != 200) {
             $httpCode = $result->getStatusCode();
             $jsonParams = $this->toJSON($params);
             $jsonResponse = $this->toJSON($this->lastResponse);
-            throw new HttpException( 500,
+            throw new HttpException(
+                500,
                 "Ошибка: HTTP код {$httpCode} при запросе '{$command}' ({$jsonParams}): {$jsonResponse}"
             );
         }
 
-        if (! empty($this->lastResponse['error']) || ! empty($this->lastResponse['error_description'])) {
+        if (!empty($this->lastResponse['error']) || !empty($this->lastResponse['error_description'])) {
             $jsonParams = $this->toJSON($params);
             $jsonResponse = $this->toJSON($this->lastResponse);
-            throw new HttpException(500,"Ошибка при запросе '{$command}' ({$jsonParams}): {$jsonResponse}");
+            throw new HttpException(500, "Ошибка при запросе '{$command}' ({$jsonParams}): {$jsonResponse}");
         }
-
-
 
         return $this->lastResponse;
     }
@@ -105,7 +96,7 @@ class Bitrix24ApiConnectorDriver
      */
     public function requestByAuth(string $command, array $params, string $authKey): mixed
     {
-        $result = $this->httpClient->request('POST',$this->getUrlByAuth($command, $authKey),[
+        $result = $this->httpClient->request('POST', $this->getUrlByAuth($command, $authKey), [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Connection' => 'close',
@@ -113,52 +104,35 @@ class Bitrix24ApiConnectorDriver
             'body' => $params
         ]);
 
-//        $this->lastResponse = json_decode($result->getContent(), true);
-
-
         try {
             $this->lastResponse = $result->getContent();
         } catch (\Exception $exception) {
             $this->lastResponse = null;
         }
 
-
-
-
         if ($result->getStatusCode() != 200) {
             $httpCode = $result->getStatusCode();
             $jsonParams = $this->toJSON($params);
             $jsonResponse = $this->toJSON(json_decode($this->lastResponse, true));
-            throw new HttpException( 500,
+            throw new HttpException(
+                500,
                 "Ошибка: HTTP код {$httpCode} при запросе '{$command}' ({$jsonParams}): {$jsonResponse}"
             );
         }
 
-//        if (! empty($this->lastResponse['error']) || ! empty($this->lastResponse['error_description'])) {
-//            $jsonParams = $this->toJSON($params);
-//            $jsonResponse = $this->toJSON($this->lastResponse);
-//            throw new HttpException(500,"Ошибка при запросе '{$command}' ({$jsonParams}): {$jsonResponse}");
-//        }
-
-
-
         return $this->lastResponse;
     }
-
-
 
     /**
      * Возвращает список всех сущностей
      *
      * @param  string $function Имя метода (функции) запроса
-     * @param  array  $params   Параметры
-     *                          запроса
+     * @param  array  $params   Параметры запроса
      * @return Generator
      * @see    https://dev.1c-bitrix.ru/rest_help/general/lists.php
      */
     public function getList(string $command, array $params = []): Generator
     {
-
         do {
             // До 50 штук на 1 запрос
             $result = $this->request(
@@ -181,15 +155,12 @@ class Bitrix24ApiConnectorDriver
      *
      * @see    https://dev.1c-bitrix.ru/rest_help/rest_sum/start.php
      * @param  string $function Имя метода (функции) запроса
-     * @param  array  $params   Параметры
-     *                          запроса
+     * @param  array  $params   Параметры запроса
      * @return Generator
      * @see    https://dev.1c-bitrix.ru/rest_help/general/lists.php
      */
     public function fetchList(string $function, array $params): array
     {
-
-
         $export = [];
         $exportResult = [];
         $commands = [];
@@ -197,21 +168,16 @@ class Bitrix24ApiConnectorDriver
         $res = $this->getRowsCount($function, $params);
         $res = iterator_to_array($res, false)[0];
 
-
         $totalRowsCount = intval($res['total']);
-
 
         if ($totalRowsCount > 50) {
             $chunkSize = 50; // Размер чанка
             $totalChunks = ceil($totalRowsCount / $chunkSize);
 
-
-
-
             for ($i = 0; $i < $totalChunks; $i++) {
                 $start = $i * $chunkSize;
 
-                $commands["list_{$i}"] = "{$function}?start={$start}&".http_build_query($params);
+                $commands["list_{$i}"] = "{$function}?start={$start}&" . http_build_query($params);
 
                 // Если накопилось 50 команд, выполняем запрос
                 if (count($commands) === 50) {
@@ -220,7 +186,7 @@ class Bitrix24ApiConnectorDriver
                         'cmd' => $commands,
                     ]);
 
-                    $export [] = $response['result']['result'];
+                    $export[] = $response['result']['result'];
                     $commands = [];
                 }
             }
@@ -232,42 +198,32 @@ class Bitrix24ApiConnectorDriver
                     'cmd' => $commands,
                 ]);
 
-                $export [] = $response['result']['result'];
+                $export[] = $response['result']['result'];
             }
-
 
             foreach ($export as $lvl1) {
                 foreach ($lvl1 as $item) {
-//                    yield $item;
-                    $exportResult [] = $item;
+                    $exportResult[] = $item;
                 }
             }
         } else {
             $res = $res['result']['items'] ?? $res['result'];
             foreach ($res as $item) {
-                $exportResult [] = $item;
+                $exportResult[] = $item;
             }
-
         }
 
-
-
-
         return $exportResult;
-
-
     }
 
     public function getOneItem(string $command, array $params): array
     {
-        $response =  $this->request(
+        $response = $this->request(
             $command,
             $params
         );
-        return $response ;
+        return $response;
     }
-
-
 
     public function getRowsCount(string $command, array $params): Generator
     {
@@ -280,19 +236,15 @@ class Bitrix24ApiConnectorDriver
         yield $result;
     }
 
-
     private function getUrl(string $cmd): string
     {
-
-        return $this->webhookUrl . '/' . $cmd .'.json';
+        return $this->webhookUrl . '/' . $cmd . '.json';
     }
 
     private function getUrlByAuth(string $cmd, string $authKey): string
     {
-
-        return $this->baseUrl . '/' . $cmd .'.json?auth='.$authKey;
+        return $this->baseUrl . '/' . $cmd . '.json?auth=' . $authKey;
     }
-
 
     private function toJSON($data, bool $prettyPrint = false): string
     {
@@ -309,5 +261,4 @@ class Bitrix24ApiConnectorDriver
 
         return $jsonParams;
     }
-
 }
