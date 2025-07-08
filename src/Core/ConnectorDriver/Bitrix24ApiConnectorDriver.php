@@ -47,6 +47,9 @@ class Bitrix24ApiConnectorDriver
      */
     public function request(string $command, array $params, string $method = 'POST'): mixed
     {
+
+        sleep(1000);
+
         $httpParams = [
             'headers' => [
                 'Content-Type' => 'application/json',
