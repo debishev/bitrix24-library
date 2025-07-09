@@ -48,7 +48,7 @@ class Bitrix24ApiConnectorDriver
     public function request(string $command, array $params, string $method = 'POST'): mixed
     {
 
-        sleep(1000);
+        sleep(2);
 
         $httpParams = [
             'headers' => [
